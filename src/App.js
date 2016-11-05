@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import AppHeader from './AppHeader.js';
+import AppContent from './AppContent.js';
+import MovementLog from './MovementLog.js';
 import './App.css';
 
 class App extends Component {
   render() {
+    const today = new Date().toLocaleDateString();
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to Lift or Nah!</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <AppHeader>
+          {today}
+        </AppHeader>
+        <AppContent>
+          <MovementLog></MovementLog>
+        </AppContent>
       </div>
     );
   }
