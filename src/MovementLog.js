@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import apihelper from './apihelper.js';
+import './MovementLog.css';
 
 class MovementLog extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ class MovementLog extends Component {
     apihelper.getMovements().then(movements => {
       const movementViews = movements.map(movement => {
         return (
-          <option value={movement.name} id={movement._id}>
+          <option value={movement.name} id={movement._id} key={movement._id}>
             {movement.name}
           </option>
         )
@@ -23,7 +24,7 @@ class MovementLog extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="movement-log">
         <select name="movement">
           {this.state.movements}
         </select>

@@ -1,0 +1,11 @@
+.movement-log {
+  padding: 12px 20px;
+  border-top: solid 1px #EEEEEE;
+  border-left: solid 1px #EEEEEE;
+  border-right: solid 1px #EEEEEE;
+  background-color: white;
+}
+
+.movement-log:last-of-type {
+  border-bottom: solid 1px #EEEEEE;
+}

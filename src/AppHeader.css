@@ -4,3 +4,10 @@
   font-size: large;
   padding: 12px 20px;
 }
+
+@media (min-width: 800px) {
+  .app-header {
+    font-size: x-large;
+    padding: 20px;
+  }
+}
