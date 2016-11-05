@@ -12,6 +12,7 @@ app.use(express.static('build'))
 app.get('/movements', function (req, res) {
   MongoHelper.getMovements(database, function(err, docs) {
     assert.equal(null, err);
+    docs.unshift({ _id: 0, name: 'Select Movement'});
     res.send(docs);
   });
 })
