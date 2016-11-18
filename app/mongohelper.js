@@ -58,17 +58,17 @@ function getMovementLogs(db, params, callback) {
 }
 
 function addMovement(db, data, callback) {
+  // TODO: upsert if it doesnt exist
   db.collection('movement-logs').updateOne({
-    workoutDate: new Date(data.workoutDate)
+    workoutDate: new Date(data.workoutDate),
+    'movements.movement_id': {$ne: new ObjectID(data.movementId)}
   }, {
-    $addToSet: {
+    $push: {
       movements: {
         movement_id: new ObjectID(data.movementId),
         sets: []
       }
     }
-  }, {
-    upsert: true
   }, (err, r) => {
     callback(null, r);
   });
