@@ -26,26 +26,34 @@ function findDocumentsByQuery(db, collectionName, query, callback) {
   });
 }
 
+function findDocumentByQuery(db, collectionName, query) {
+  assert.notEqual(null, db);
+  assert.notEqual(null, query);
+
+  var collection = db.collection(collectionName);
+  return collection.findOne(query);
+}
+
 function getMovements(db, callback) {
   findDocuments(db, 'movements', callback);
 }
 
 function getMovementLogs(db, params, callback) {
-  findDocumentsByQuery(db, 'movement-logs', { workoutDate: new Date(params.date) }, function(err, movementLogs) {
-    assert.equal(null, err);
-
-    movementLogs.forEach(function (log, index) {
-      log.movements.forEach(function (movement, index, arr) {
-        findDocumentsByQuery(db, 'movements', { _id: movement.movement_id }, function (err, docs) {
-          arr[index].movement = docs[0];
-          arr[index].movement_id = undefined;
-
-          if (index === arr.length - 1) {
-            callback(null, movementLogs);
-          }
-        })
-      })
-    })
+  assert.notEqual(null, db);
+  const movementLogscollection = db.collection('movement-logs'); 
+  const movementsCollection = db.collection('movements');
+  let retMovementLog = null;
+  movementLogscollection.findOne({ workoutDate: new Date(params.date) }).then((movementLog) => {
+    retMovementLog = movementLog;
+    return Promise.all(movementLog.movements.map((elem, index) => {
+      return movementsCollection.findOne({ _id: elem.movement_id }); 
+    }));
+  }).then((movements) => {
+    retMovementLog.movements.forEach((elem, index) => {
+      elem.movement = movements[index];
+      delete elem.movement_id;
+    });
+    callback(null, [retMovementLog])
   });
 }
 
@@ -53,7 +61,7 @@ function addMovement(db, data, callback) {
   db.collection('movement-logs').updateOne({
     workoutDate: new Date(data.workoutDate)
   }, {
-    $push: {
+    $addToSet: {
       movements: {
         movement_id: new ObjectID(data.movementId),
         sets: []
