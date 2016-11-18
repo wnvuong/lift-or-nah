@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import './AppHeader.css';
+import ContentContainer from './ContentContainer.js';
 
 class AppHeader extends Component {
   render() {
     return (
       <div className='app-header'>
-        {this.props.children}
+        <ContentContainer>
+          {this.props.title}
+        </ContentContainer>
       </div>
     )
   }

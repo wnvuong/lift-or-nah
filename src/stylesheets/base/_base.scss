@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// This file contains very basic styles.
+// -----------------------------------------------------------------------------
+
 /**
  * Set up a decent box model on the root element
  */
@@ -15,13 +19,15 @@ html {
   box-sizing: inherit;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  background-color: #FAFAFA;
-}
+/**
+ * Basic styles for links
+ */
+a {
+  color: $brand-color;
+  text-decoration: none;
 
-* {
-  transition: all 0.1s ease;
+  @include on-event {
+    color: $text-color;
+    text-decoration: underline;
+  }
 }

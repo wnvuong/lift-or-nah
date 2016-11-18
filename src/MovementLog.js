@@ -1,33 +1,33 @@
 import React, { Component } from 'react';
-import apihelper from './apihelper.js';
-import './MovementLog.css';
+import apihelper from './utils/apihelper.js';
 
 class MovementLog extends Component {
   constructor(props) {
     super(props);
+    let setsView = props.sets.map((set, index) => {
+      return (
+        <div key={index}>
+          <div className='pull-right'>
+            {set.reps} reps
+          </div>
+          <div className='pull-left'>
+            {set.weight} lbs
+          </div>
+        </div>
+      )
+    });
 
-    this.state = { movements: [] };
-
-    apihelper.getMovements().then(movements => {
-      const movementViews = movements.map(movement => {
-        return (
-          <option value={movement.name} id={movement._id} key={movement._id}>
-            {movement.name}
-          </option>
-        )
-      });
-
-      this.setState({
-        movements: movementViews
-      });
-    })
+    this.state = { sets: setsView };
   }
   render() {
     return (
       <div className="movement-log">
-        <select name="movement">
-          {this.state.movements}
-        </select>
+        <h6 className='movement-log__title'>
+          {this.props.name}
+        </h6>
+        <div className='clearfix'>
+          {this.state.sets}
+        </div>
       </div>
     )
   }

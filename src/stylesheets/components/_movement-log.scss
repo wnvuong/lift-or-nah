@@ -1,0 +1,15 @@
+.movement-log {
+  padding: 16px;
+  border-top: solid 1px $light-grey;
+  border-left: solid 1px $light-grey;
+  border-right: solid 1px $light-grey;
+  background-color: white;
+}
+
+.movement-log__title {
+  margin: 0;
+}
+
+.movement-log:last-of-type {
+  border-bottom: solid 1px $light-grey;
+}
