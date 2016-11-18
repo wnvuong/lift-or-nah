@@ -36,7 +36,7 @@ class AddMovementModal extends Component {
   }
   handleMovementSelected = (movement) => {
     apihelper.addMovement(movement._id, this.props.date).then(res => {
-      console.log(res);
+      this.setState({ isVisible: false });      
     });
   }
   render() {
