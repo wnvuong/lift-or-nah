@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import AppHeader from './AppHeader.js';
-import AppContent from './AppContent.js';
+// import AppHeader from './AppHeader.js';
+// import AppContent from './AppContent.js';
 import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
 import { Layout, Header, HeaderRow, Content } from 'react-mdl';
@@ -15,18 +15,27 @@ class App extends Component {
 
     this.state = {
       date: new Date(2016, 10, 11),
-      movementLog: { movements: [] }
+      movements: []
     };
 
     apihelper.getMovementLogs(this.state.date).then(movementLogs => {
       this.setState({
-        movementLog: movementLogs[0]
+        movements: movementLogs[0].movements,
+        id: movementLogs[0]._id
       });
     });
   }
   handleMovementAdded = (movement) => {
     this.setState({
-      movementLog: { movements: this.state.movementLog.movements.concat([{movement: movement, sets: []}]) }
+      movements: this.state.movements.concat([{movement: movement, sets: []}])
+    });
+  }
+  handleSetAdded = (movement) => {
+    let movements = this.state.movements.slice(0, this.state.movements.length);
+    movements[movement.index].sets.push(movement.set)
+
+    this.setState({
+      movements: movements
     });
   }
   render() {
@@ -42,10 +51,11 @@ class App extends Component {
             <DailyLog 
             className='content-container' 
             date={this.state.date}
-            movementLog={this.state.movementLog} />
+            movements={this.state.movements}
+            onSetAdded={this.handleSetAdded} />
             <AddMovementModal 
             date={this.state.date} 
-            movementLog={this.state.movementLog}
+            movements={this.state.movements}
             onMovementAdded={this.handleMovementAdded} />
           </Content>
         </Layout>

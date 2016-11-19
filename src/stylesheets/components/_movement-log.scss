@@ -8,6 +8,9 @@
 
 .movement-log__title {
   margin: 0;
+  @include flexbox();
+  @include justify-content(space-between);
+  @include align-items(center);
 }
 
 .movement-log:last-of-type {

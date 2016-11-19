@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FABButton, Icon, Button } from 'react-mdl';
+import { Button } from 'react-mdl';
 
 class AddMovementModalListItem extends Component {
   handleMovementSelected = (e) => {

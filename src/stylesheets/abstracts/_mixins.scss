@@ -32,3 +32,20 @@
   }
 }
 
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@mixin justify-content($content) {
+  -webkit-justify-content: $content;
+  -ms-justify-content: $content;
+  justify-content: $content
+}
+
+@mixin align-items($content) {
+  -webkit-box-align: $content;
+  -ms-flex-align: $content;
+  align-items: $content;
+}

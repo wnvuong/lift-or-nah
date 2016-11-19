@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { FABButton, Icon, Button } from 'react-mdl';
+import { FABButton, Icon } from 'react-mdl';
 import AddMovementModalListItem from './AddMovementModalListItem.js';
 import apihelper from './utils/apihelper.js';
-import datehelper from './utils/datehelper.js';
 class AddMovementModal extends Component {
   constructor(props) {
     super(props);
