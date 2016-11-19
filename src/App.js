@@ -24,19 +24,29 @@ class App extends Component {
       });
     });
   }
+  handleMovementAdded = (movement) => {
+    this.setState({
+      movementLog: { movements: this.state.movementLog.movements.concat([{movement: movement, sets: []}]) }
+    });
+  }
   render() {
     return (
       <div>
         <Layout fixedHeader className='mdl-color--grey-50'>
           <Header>
-            <HeaderRow className='content-container app-header' 
+            <HeaderRow 
+            className='content-container app-header' 
             title={<span><strong>{this.state.date.toLocaleDateString()}</strong></span>} />
           </Header>
           <Content>
-            <DailyLog className='content-container' 
+            <DailyLog 
+            className='content-container' 
             date={this.state.date}
             movementLog={this.state.movementLog} />
-            <AddMovementModal date={this.state.date} />
+            <AddMovementModal 
+            date={this.state.date} 
+            movementLog={this.state.movementLog}
+            onMovementAdded={this.handleMovementAdded} />
           </Content>
         </Layout>
       </div>
