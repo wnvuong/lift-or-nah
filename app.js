@@ -19,15 +19,24 @@ app.get('/movements', function (req, res) {
 })
 
 app.get('/movementlogs/:date?', (req, res) => {
-  console.log(req.params)
   MongoHelper.getMovementLogs(database, req.params, function(err, docs) {
     assert.equal(null, err);
     res.send(docs);
   });
 })
 
-app.put('/movementlogs', function (req, res) {
-  MongoHelper.addMovement(database, req.body, (err, r) => {
+app.put('/movementlogs/:date/:movement_id', function (req, res) {
+  let weight = null;
+  let reps = null;
+  if (req.body != null) {
+    if (req.body.weight != null) {
+      weight = req.body.weight;
+    }
+    if (req.body.reps != null) {
+      reps = req.body.reps;
+    }
+  }
+  MongoHelper.addMovement(database, req.params.date, req.params.movement_id, weight, reps, (err, r) => {
     assert.equal(null, err);
     res.send(r);
   })

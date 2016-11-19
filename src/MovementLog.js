@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { IconButton } from 'react-mdl';
+import apihelper from './utils/apihelper.js';
 
 class MovementLog extends Component {
   handleSetAdded = () => {
+    apihelper.addSet(this.props.movement.movement._id, this.props.date, 315, 5).then(res => {
+      console.log(res);
+    });
     this.props.onSetAdded({
       index: this.props.index,
       set: { 
-        weight: 225, 
+        weight: 315, 
         reps: 5 
       }
     });

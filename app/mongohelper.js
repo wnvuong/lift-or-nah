@@ -57,21 +57,37 @@ function getMovementLogs(db, params, callback) {
   });
 }
 
-function addMovement(db, data, callback) {
-  // TODO: upsert if it doesnt exist
-  db.collection('movement-logs').updateOne({
-    workoutDate: new Date(data.workoutDate),
-    'movements.movement_id': {$ne: new ObjectID(data.movementId)}
-  }, {
-    $push: {
-      movements: {
-        movement_id: new ObjectID(data.movementId),
-        sets: []
+function addMovement(db, date, movement_id, weight, reps, callback) {
+  if (weight != null && reps != null) {
+    db.collection('movement-logs').updateOne({
+      workoutDate: new Date(date),
+      'movements.movement_id': new ObjectID(movement_id)
+    }, {
+      $push: {
+        'movements.$.sets': {
+          weight: weight,
+          reps: reps
+        }
       }
-    }
-  }, (err, r) => {
-    callback(null, r);
-  });
+    }, (err, r) => {
+      callback(null, r);
+    });
+  } else {
+    // TODO: upsert if it doesnt exist
+    db.collection('movement-logs').updateOne({
+      workoutDate: new Date(date),
+      'movements.movement_id': {$ne: new ObjectID(movement_id)}
+    }, {
+      $push: {
+        movements: {
+          movement_id: new ObjectID(movement_id),
+          sets: []
+        }
+      }
+    }, (err, r) => {
+      callback(null, r);
+    });
+  }
 }
 
 module.exports = {

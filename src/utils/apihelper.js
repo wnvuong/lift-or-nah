@@ -49,17 +49,22 @@ function getMovementLogs(date) {
 }
 
 function addMovement(movementId, workoutDate) {
+  return put('/movementlogs/' + workoutDate.toISOString() + '/' + movementId).then(JSON.parse);
+}
+
+function addSet(movementId, workoutDate, weight, reps) {
   let data = {
-    movementId: movementId,
-    workoutDate: workoutDate
-  };
-  return put('/movementlogs', data).then(JSON.parse);
+    weight: weight,
+    reps: reps
+  }
+  return put('/movementlogs/' + workoutDate.toISOString() + '/' + movementId, data).then(JSON.parse);
 }
 
 var api = {
   getMovements: getMovements,
   getMovementLogs: getMovementLogs,
-  addMovement: addMovement
+  addMovement: addMovement,
+  addSet: addSet
 }
 
 export default api;

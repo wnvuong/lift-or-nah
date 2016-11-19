@@ -9,6 +9,7 @@ class DailyLog extends Component {
           key={index}
           index={index}
           movement={movement}
+          date={this.props.date}
           onSetAdded={this.props.onSetAdded}
           />
       )
