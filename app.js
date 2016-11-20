@@ -47,8 +47,11 @@ MongoClient.connect(url, function(err, db) {
   console.log("Connected successfully to server");
 
   database = db;
-
-  app.listen(8000, function () {
-    console.log('lift-or-nah listening on port 8000!')
+  let port = 8000;
+  if (process.env.NODE_ENV === 'production') {
+    port = 80;
+  }
+  app.listen(port, function () {
+    console.log('lift-or-nah listening on port ' + port + '!')
   })
 });

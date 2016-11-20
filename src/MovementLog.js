@@ -16,18 +16,6 @@ class MovementLog extends Component {
     });
   }
   render() {
-    let sets = this.props.movement.sets.map((set, index) => {
-      return (
-        <div key={index}>
-          <div className='pull-right'>
-            {set.reps} reps
-          </div>
-          <div className='pull-left'>
-            {set.weight} lbs
-          </div>
-        </div>
-      )
-    });
     let reps = this.props.movement.sets.map((set, index) => {
       return (
         <div key={index}>

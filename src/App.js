@@ -6,9 +6,6 @@ import AddMovementModal from './AddMovementModal.js';
 import { Layout, Header, HeaderRow, Content } from 'react-mdl';
 import apihelper from './utils/apihelper.js';
 
-import 'react-mdl/extra/material.css';
-import 'react-mdl/extra/material.js';
-
 class App extends Component {
   constructor(props) {
     super(props);
