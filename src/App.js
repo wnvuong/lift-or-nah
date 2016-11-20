@@ -23,9 +23,14 @@ class App extends Component {
     });
   }
   handleMovementAdded = (movement) => {
-    this.setState({
-      movements: this.state.movements.concat([{movement: movement, sets: []}])
+    let foundMovement = this.state.movements.find((elem) => {
+      return elem.movement._id == movement._id; 
     });
+    if (foundMovement === undefined) {
+      this.setState({
+        movements: this.state.movements.concat([{movement: movement, sets: []}])
+      }); 
+    }
   }
   handleSetAdded = (movement) => {
     let movements = this.state.movements.slice(0, this.state.movements.length);
