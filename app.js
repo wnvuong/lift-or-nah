@@ -4,7 +4,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const assert = require('assert');
 const app = express();
-const url = 'mongodb://localhost:27017/lift-or-nah';
+
+let mongoURL = 'mongodb://localhost:27017/lift-or-nah';
+if (process.env.NODE_ENV === 'production') {
+  mongoURL = 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASSWORD + '@' + process.env.MONGO_URL; 
+}
 
 let database = null;
 
@@ -42,7 +46,7 @@ app.put('/movementlogs/:date/:movement_id', function (req, res) {
   })
 })
 
-MongoClient.connect(url, function(err, db) {
+MongoClient.connect(mongoURL, function(err, db) {
   assert.equal(null, err);
   console.log("Connected successfully to server");
 
