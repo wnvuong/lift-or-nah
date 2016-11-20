@@ -1,5 +1,5 @@
 .movement-log {
-  padding: 16px;
+  padding: 10px 16px;
   border-top: solid 1px $light-grey;
   border-left: solid 1px $light-grey;
   border-right: solid 1px $light-grey;
@@ -11,6 +11,16 @@
   @include flexbox();
   @include justify-content(space-between);
   @include align-items(center);
+}
+
+.movement-log__weight {
+  height: 32px;
+  line-height: 32px;
+}
+
+.movement-log__reps {
+  height: 32px;
+  line-height: 32px;
 }
 
 .movement-log:last-of-type {

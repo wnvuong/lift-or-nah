@@ -18,14 +18,14 @@ class MovementLog extends Component {
   render() {
     let reps = this.props.movement.sets.map((set, index) => {
       return (
-        <div key={index}>
-            {set.reps} reps        
+        <div className='movement-log__reps' key={index}>
+            {set.reps} reps
         </div>
       )
     });
     let weight = this.props.movement.sets.map((set, index) => {
       return (
-        <div key={index}>
+        <div className='movement-log__weight' key={index}>
             {set.weight} lbs
         </div>
       )
