@@ -19,19 +19,18 @@ html {
   box-sizing: inherit;
 }
 
-/**
- * Basic styles for links
- */
+html {
+  background: $grey50;
+}
+
 a {
-  color: $brand-color;
   text-decoration: none;
 
   @include on-event {
-    color: $text-color;
     text-decoration: underline;
   }
 }
 
-html {
-  background: $grey50;
+body {
+  margin: 0;
 }

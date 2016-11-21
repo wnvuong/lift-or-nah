@@ -1,9 +1,10 @@
 .movement-log {
-  padding: 10px 16px;
-  border-top: solid 1px $light-grey;
-  border-left: solid 1px $light-grey;
-  border-right: solid 1px $light-grey;
-  background-color: white;
+  @media (max-width: $max-width) {
+    margin: 0 8px;
+  }
+  &+.movement-log {
+    margin-top: 8px;
+  }
 }
 
 .movement-log__title {
