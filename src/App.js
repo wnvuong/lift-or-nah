@@ -4,7 +4,7 @@ import AddMovementModal from './AddMovementModal.js';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
-
+import AppContent from './AppContent.js';
 import apihelper from './utils/apihelper.js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -48,7 +48,9 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <div>
-          <AppBar className='app-bar'
+          <AppBar 
+            className='app-bar'
+            style={{position: 'fixed'}}
             title={
               <div className='content-container'>
                 <h1 className='app-header'>
@@ -58,17 +60,19 @@ class App extends Component {
             }
             iconElementLeft={<div />}
           />
-          <DailyLog 
-            className='content-container' 
-            date={this.state.date}
-            movements={this.state.movements}
-            onSetAdded={this.handleSetAdded} 
-          />
-          <AddMovementModal 
-            date={this.state.date} 
-            movements={this.state.movements}
-            onMovementAdded={this.handleMovementAdded} 
-          />        
+          <AppContent>
+            <DailyLog 
+              className='content-container' 
+              date={this.state.date}
+              movements={this.state.movements}
+              onSetAdded={this.handleSetAdded} 
+            />
+            <AddMovementModal 
+              date={this.state.date} 
+              movements={this.state.movements}
+              onMovementAdded={this.handleMovementAdded} 
+            />        
+          </AppContent>
         </div>
       </MuiThemeProvider>
     );
