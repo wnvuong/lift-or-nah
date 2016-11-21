@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-// import AppHeader from './AppHeader.js';
-// import AppContent from './AppContent.js';
 import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
-import { Layout, Header, HeaderRow, Content } from 'react-mdl';
+
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
+
 import apihelper from './utils/apihelper.js';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +28,7 @@ class App extends Component {
   }
   handleMovementAdded = (movement) => {
     let foundMovement = this.state.movements.find((elem) => {
-      return elem.movement._id == movement._id; 
+      return elem.movement._id === movement._id; 
     });
     if (foundMovement === undefined) {
       this.setState({
@@ -42,27 +46,31 @@ class App extends Component {
   }
   render() {
     return (
-      <div>
-        <Layout fixedHeader className='mdl-color--grey-50'>
-          <Header>
-            <HeaderRow 
-            className='content-container app-header' 
-            title={<span><strong>{this.state.date.toLocaleDateString()}</strong></span>} />
-          </Header>
-          <Content>
-            <DailyLog 
+      <MuiThemeProvider>
+        <div>
+          <AppBar className='app-bar'
+            title={
+              <div className='content-container'>
+                <h1 className='app-header'>
+                  <strong>{this.state.date.toLocaleDateString()}</strong>
+                </h1>
+              </div>
+            }
+            iconElementLeft={<div />}
+          />
+          <DailyLog 
             className='content-container' 
             date={this.state.date}
             movements={this.state.movements}
-            onSetAdded={this.handleSetAdded} />
-            <AddMovementModal 
+            onSetAdded={this.handleSetAdded} 
+          />
+          <AddMovementModal 
             date={this.state.date} 
             movements={this.state.movements}
-            onMovementAdded={this.handleMovementAdded} />
-          </Content>
-        </Layout>
-      </div>
-
+            onMovementAdded={this.handleMovementAdded} 
+          />        
+        </div>
+      </MuiThemeProvider>
     );
   }
 }

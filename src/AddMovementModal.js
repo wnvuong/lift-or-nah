@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { FABButton, Icon } from 'react-mdl';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import AddMovementModalListItem from './AddMovementModalListItem.js';
 import apihelper from './utils/apihelper.js';
 class AddMovementModal extends Component {
@@ -53,9 +54,9 @@ class AddMovementModal extends Component {
             </div>
           </div>
         </div>
-        <FABButton colored ripple className='daily-log__add' onClick={this.handleShowModal}>
-          <Icon name="add" />
-        </FABButton>
+        <FloatingActionButton className='daily-log__add' onTouchTap={this.handleShowModal}>
+          <ContentAdd />
+        </FloatingActionButton>
       </div>
     )
   }

@@ -55,11 +55,12 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "global": "^4.3.1",
+    "material-ui": "^0.16.4",
     "mongodb": "^2.2.11",
     "nodemon": "^1.11.0",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-mdl": "^1.7.2"
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0",
+    "react-tap-event-plugin": "git+https://github.com/zilverline/react-tap-event-plugin.git#master"
   },
   "scripts": {
     "start": "node scripts/start.js",

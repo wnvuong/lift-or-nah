@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-mdl';
+import FlatButton from 'material-ui/FlatButton';
 
 class AddMovementModalListItem extends Component {
   handleMovementSelected = (e) => {
@@ -7,11 +7,11 @@ class AddMovementModalListItem extends Component {
   }
   render() {
     return (
-      <Button ripple
+      <FlatButton 
         className='btn--list'
-        onClick={this.handleMovementSelected}>
-        {this.props.movement.name}
-      </Button>
+        onTouchTap={this.handleMovementSelected}
+        label={this.props.movement.name} 
+      />
     )
   }
 }

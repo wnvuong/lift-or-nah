@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { IconButton } from 'react-mdl';
+import IconButton from 'material-ui/IconButton';
 import apihelper from './utils/apihelper.js';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 class MovementLog extends Component {
   handleSetAdded = () => {
@@ -34,7 +35,9 @@ class MovementLog extends Component {
       <div className="movement-log">
         <h6 className='movement-log__title'>
           {this.props.movement.movement.name}
-          <IconButton name="add" colored onClick={this.handleSetAdded} />          
+          <IconButton onTouchTap={this.handleSetAdded}>
+            <ContentAdd />
+          </IconButton>          
         </h6>
         <div className='clearfix'>
           <div className='pull-right'>
