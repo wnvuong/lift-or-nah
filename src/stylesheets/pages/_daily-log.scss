@@ -4,6 +4,8 @@
 
 .daily-log__add {
   position: fixed;
+  /*top: 34px;*/
   bottom: 25px;
   right: 25px;
+  z-index: 1200;
 }

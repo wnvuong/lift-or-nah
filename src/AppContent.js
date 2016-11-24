@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ContentContainer from './ContentContainer.js';
 
 class AppContent extends Component {
   render() {

@@ -1,9 +1,38 @@
 .movement-log {
-  @media (max-width: $max-width) {
+  max-width: 380px;
+  margin: 0 auto;
+
+  @media (max-width: 380px) {
     margin: 0 8px;
   }
   &+.movement-log {
     margin-top: 8px;
+  }
+
+  &__body {
+    padding: 10px 0;
+  }
+
+  &__line-item {
+    @include flexbox();
+    @include justify-content(space-between);
+    @include align-items(center);    
+  }
+
+  &__weight {
+    input {
+      text-align: right;
+    }
+  }
+
+  &__weight-container {
+    @include flexbox();
+    @include align-items(center);    
+  }
+
+  &__reps-container {
+    @include flexbox();
+    @include align-items(center);    
   }
 }
 
@@ -14,14 +43,9 @@
   @include align-items(center);
 }
 
-.movement-log__weight {
-  height: 32px;
-  line-height: 32px;
-}
-
 .movement-log__reps {
-  height: 32px;
-  line-height: 32px;
+  width: 19px;
+  text-align: right;
 }
 
 .movement-log:last-of-type {

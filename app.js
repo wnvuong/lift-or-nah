@@ -32,6 +32,7 @@ app.get('/movementlogs/:date?', (req, res) => {
 app.put('/movementlogs/:date/:movement_id', function (req, res) {
   let weight = null;
   let reps = null;
+  let index = null;
   if (req.body != null) {
     if (req.body.weight != null) {
       weight = req.body.weight;
@@ -39,12 +40,29 @@ app.put('/movementlogs/:date/:movement_id', function (req, res) {
     if (req.body.reps != null) {
       reps = req.body.reps;
     }
+    if (req.body.index != null) {
+      index = req.body.index;
+    }
   }
-  MongoHelper.addMovement(database, req.params.date, req.params.movement_id, weight, reps, (err, r) => {
+  MongoHelper.addSet(database, req.params.date, req.params.movement_id, weight, reps, index, (err, r) => {
     assert.equal(null, err);
     res.send(r);
   })
 })
+
+app.delete('/movementlogs/:date/:movement_id/:set_id', function (req, res) {
+  MongoHelper.removeSet(database, req.params.date, req.params.movement_id, req.params.set_id, (err, r) => {
+    assert.equal(null, err);
+    res.send(r);
+  });
+});
+
+app.put('/movementlogs/:date/:movement_id/:set_id', function (req, res) {
+  MongoHelper.updateSet(database, req.params.date, req.params.movement_id, req.params.set_id, req.body.weight, req.body.reps, (err, r) => {
+    assert.equal(null, err);
+    res.send(r);
+  });
+});
 
 MongoClient.connect(mongoURL, function(err, db) {
   assert.equal(null, err);

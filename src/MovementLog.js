@@ -1,86 +1,72 @@
 import React, { Component } from 'react';
-import IconButton from 'material-ui/IconButton';
+
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
-import apihelper from './utils/apihelper.js';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import {List, ListItem} from 'material-ui/List';
-import Paper from 'material-ui/Paper';
-import Subheader from 'material-ui/Subheader';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-
+import { Card, CardActions, CardHeader } from 'material-ui/Card';
+import MovementLogLineItem from './MovementLogLineItem.js';
 
 class MovementLog extends Component {
-  handleSetAdded = () => {
-    apihelper.addSet(this.props.movement.movement._id, this.props.date, 315, 5).then(res => {
-      console.log(res);
-    });
-    this.props.onSetAdded({
-      index: this.props.index,
-      set: { 
-        weight: 315, 
-        reps: 5 
+  shouldComponentUpdate(nextProps, nextState) {
+    
+    if (this.props.movement._id !== nextProps.movement._id || 
+    nextProps.movement.name !== nextProps.movement.name) {
+      return true;
+    }
+
+    if (this.props.sets.length !== nextProps.sets.length) {
+      return true;
+    }
+
+    for (let i = 0; i < this.props.sets.length; i++) {
+      let currSet = this.props.sets[i];
+      let nextSet = nextProps.sets[i]; 
+
+      if (currSet.id !== nextSet.id ||
+      currSet.weight !== nextSet.weight ||
+      currSet.reps !== nextSet.reps) {
+        return true;
       }
-    });
+    }
+    
+    return false;
+  }
+  handleSetAdded = () => {
+    this.props.onSetAdded(this.props.movement._id, this.props.date, this.props.index, 315, 5);
   }
   render() {
-    let sets = this.props.movement.sets.map((set, index) => {
+    let sets = this.props.sets.map((set, set_index) => {
       return (
-        <TableRow key={index}>
-          <TableRowColumn>{set.weight}</TableRowColumn>
-          <TableRowColumn>{set.reps}</TableRowColumn>
-        </TableRow>
-      )
-    });
-    let reps = this.props.movement.sets.map((set, index) => {
-      return (
-        <div className='movement-log__reps' key={index}>
-            {set.reps} reps
-        </div>
-      )
-    });
-    let weight = this.props.movement.sets.map((set, index) => {
-      return (
-        <div className='movement-log__weight' key={index}>
-            {set.weight} lbs
-        </div>
+        <MovementLogLineItem
+          key={set.id}
+          set_id={set.id} 
+          set_index={set_index}
+          weight={set.weight}
+          reps={set.reps}
+          movement={this.props.movement}
+          date={this.props.date}
+          onRepAdded={this.props.onRepAdded}
+          onRepRemoved={this.props.onRepRemoved}
+          onSetRemoved={this.props.onSetRemoved}
+        />    
       )
     });
     return (
       <Card className='movement-log'> 
-        <CardHeader title={this.props.movement.movement.name} />
+        <CardHeader 
+          title={this.props.movement.name}
+        />
         <Divider />
-          <Table>
-            <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-              <TableRow>
-                <TableHeaderColumn>Weight</TableHeaderColumn>
-                <TableHeaderColumn>Reps</TableHeaderColumn>
-              </TableRow>
-            </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-              {sets}
-            </TableBody>
-          </Table>
+        <div className='movement-log__body'>
+          {sets}
+        </div>
         <Divider />
-          {/*<div className="movement-log">
-            <h6 className='movement-log__title'>
-              {this.props.movement.movement.name}
-              <IconButton onTouchTap={this.handleSetAdded}>
-                <ContentAdd />
-              </IconButton>          
-            </h6>
-            <div className='clearfix'>
-              <div className='pull-right'>
-                {reps}
-              </div>
-              <div className='pull-left'>
-                {weight}
-              </div>
-            </div>
-          </div>*/}
         <CardActions>
-          <FlatButton label='Add Set' labelStyle={{ paddingLeft: '8px', paddingRight: '8px'}} style={{minWidth: 0}} />
+          <FlatButton 
+            label='Add Set' 
+            labelStyle={{ paddingLeft: '8px', paddingRight: '8px'}} 
+            style={{minWidth: 0}}
+            onTouchTap={this.handleSetAdded} 
+          />
         </CardActions>
       </Card>
     )

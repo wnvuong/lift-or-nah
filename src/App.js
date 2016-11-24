@@ -7,6 +7,7 @@ import AppBar from 'material-ui/AppBar';
 import AppContent from './AppContent.js';
 import apihelper from './utils/apihelper.js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import update from 'immutability-helper';
 
 injectTapEventPlugin();
 
@@ -16,14 +17,15 @@ class App extends Component {
 
     this.state = {
       date: new Date(2016, 10, 11),
-      movements: []
+      _id: null,
+      movements: [],
+      sets: {}
     };
 
     apihelper.getMovementLogs(this.state.date).then(movementLogs => {
-      this.setState({
-        movements: movementLogs[0].movements,
-        id: movementLogs[0]._id
-      });
+      console.log(movementLogs)
+      movementLogs[0].date = new Date(movementLogs[0].date);
+      this.setState(movementLogs[0]); 
     });
   }
   handleMovementAdded = (movement) => {
@@ -36,12 +38,82 @@ class App extends Component {
       }); 
     }
   }
-  handleSetAdded = (movement) => {
-    let movements = this.state.movements.slice(0, this.state.movements.length);
-    movements[movement.index].sets.push(movement.set)
+  handleSetAdded = (movement_id, date, movement_index, weight, reps) => {
+    apihelper.addSet(movement_id, date, weight, reps, this.state.sets[movement_id].values.length).then(res => {
+      console.log(res);
+      
+      // clone the sets object
+      const clone = Object.getOwnPropertyNames(this.state.sets).reduce((clone, currSet) => {
+        clone[currSet] = {
+          movement_id: this.state.sets[currSet].movement_id, 
+          values: this.state.sets[currSet].values.slice(0, this.state.sets[currSet].values.length)
+        };
+        return clone;
+      }, {});
 
-    this.setState({
-      movements: movements
+      clone[movement_id].values.push({
+        weight: weight,
+        reps: reps,
+        id: res.set_id  
+      });
+      this.setState({ sets: clone });
+    });
+  }
+  handleSetRemoved = (movement_id, date, set_index, set_id) => {
+    apihelper.removeSet(movement_id, date, set_id).then(res => {
+      console.log(res);
+    });
+
+    // clone the sets object
+    const clone = Object.getOwnPropertyNames(this.state.sets).reduce((clone, currSet) => {
+      clone[currSet] = {
+        movement_id: this.state.sets[currSet].movement_id, 
+        values: this.state.sets[currSet].values.slice(0, this.state.sets[currSet].values.length)
+      };
+      return clone;
+    }, {});
+
+    clone[movement_id].values.splice(set_index, 1);
+    this.setState({ sets: clone });
+  }
+  handleRepRemoved = (movement_id, date, set_index, set_id) => {
+    const changesToMake = {};
+    changesToMake[movement_id] = {};
+    changesToMake[movement_id].values = {};
+    changesToMake[movement_id].values[set_index] = {
+      reps: {
+        $apply: (reps) => { return reps - 1; }
+      }
+    };
+    const sets = update(this.state.sets, changesToMake);
+    
+    this.setState({ sets: sets });
+
+    const weight = sets[movement_id].values[set_index].weight;
+    const reps = sets[movement_id].values[set_index].reps;
+
+    apihelper.updateSet(movement_id, date, set_id, weight, reps).then(res => {
+      console.log(res);
+    });
+  }
+  handleRepAdded = (movement_id, date, set_index, set_id) => {
+    const changesToMake = {};
+    changesToMake[movement_id] = {};
+    changesToMake[movement_id].values = {};
+    changesToMake[movement_id].values[set_index] = {
+      reps: {
+        $apply: (reps) => { return reps + 1; }
+      }
+    };
+    const sets = update(this.state.sets, changesToMake);
+    
+    this.setState({ sets: sets });
+
+    const weight = sets[movement_id].values[set_index].weight;
+    const reps = sets[movement_id].values[set_index].reps;
+
+    apihelper.updateSet(movement_id, date, set_id, weight, reps).then(res => {
+      console.log(res);
     });
   }
   render() {
@@ -65,7 +137,11 @@ class App extends Component {
               className='content-container' 
               date={this.state.date}
               movements={this.state.movements}
-              onSetAdded={this.handleSetAdded} 
+              sets={this.state.sets}
+              onSetAdded={this.handleSetAdded}
+              onSetRemoved={this.handleSetRemoved}
+              onRepAdded={this.handleRepAdded}
+              onRepRemoved={this.handleRepRemoved}
             />
             <AddMovementModal 
               date={this.state.date} 

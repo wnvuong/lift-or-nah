@@ -1,8 +1,41 @@
 import React, { Component } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import IconButton from 'material-ui/IconButton';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import AddMovementModalListItem from './AddMovementModalListItem.js';
 import apihelper from './utils/apihelper.js';
+
+const styles = {
+  smallIcon: {
+    width: 36,
+    height: 36,
+  },
+  mediumIcon: {
+    width: 48,
+    height: 48,
+  },
+  largeIcon: {
+    width: 60,
+    height: 60,
+  },
+  small: {
+    width: 72,
+    height: 72,
+    padding: 16,
+  },
+  medium: {
+    width: 96,
+    height: 96,
+    padding: 24,
+  },
+  large: {
+    width: 120,
+    height: 120,
+    padding: 30,
+  },
+};
+
 class AddMovementModal extends Component {
   constructor(props) {
     super(props);
@@ -26,13 +59,14 @@ class AddMovementModal extends Component {
       });
     })
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
   handleShowModal = () => {
     this.setState({ isVisible: true });
   }
   handleCloseModal = (e) => {
-    if (e.target === this.modalContainer) {
-      this.setState({ isVisible: false });
-    }
+    this.setState({ isVisible: false });
   }
   handleMovementSelected = (movement) => {
     apihelper.addMovement(movement._id, this.props.date).then(res => {
@@ -43,18 +77,25 @@ class AddMovementModal extends Component {
   render() {
     return (
       <div>
-        <div className={(this.state.isVisible ? '' : 'hidden') + ' add-movement-modal-container'}
-          onClick={this.handleCloseModal} ref={(container) => this.modalContainer = container}>
-          <div className='add-movement-modal-container__modal'>
+        <div className={(this.state.isVisible ? 'add-movement-modal-container--visible' : '') + ' add-movement-modal-container'}>
+          <div>
+            <IconButton style={styles.small} iconStyle={styles.smallIcon} onTouchTap={this.handleCloseModal}>
+              <NavigationArrowBack />
+            </IconButton>
+            <h2>Add Movement</h2>
+          </div>
+          
+
+          {/*<div className='add-movement-modal-container__modal'>
             <h5 className='add-movement-modal-container__modal-title'>
               Add Movement
             </h5>
             <div className='add-movement-modal-container__modal-body'>
               {this.state.movements}
             </div>
-          </div>
+          </div>*/}
         </div>
-        <FloatingActionButton className='daily-log__add' onTouchTap={this.handleShowModal}>
+        <FloatingActionButton secondary={true} className='daily-log__add' onTouchTap={this.handleShowModal}>
           <ContentAdd />
         </FloatingActionButton>
       </div>

@@ -42,56 +42,66 @@ function getMovementLogs(db, params, callback) {
   assert.notEqual(null, db);
   const movementLogscollection = db.collection('movement-logs'); 
   const movementsCollection = db.collection('movements');
+
   let retMovementLog = null;
-  movementLogscollection.findOne({ workoutDate: new Date(params.date) }).then((movementLog) => {
+  movementLogscollection.findOne({ date: new Date(params.date) }).then(movementLog => {
     retMovementLog = movementLog;
-    return Promise.all(movementLog.movements.map((elem, index) => {
-      return movementsCollection.findOne({ _id: elem.movement_id }); 
-    }));
-  }).then((movements) => {
-    retMovementLog.movements.forEach((elem, index) => {
-      elem.movement = movements[index];
-      delete elem.movement_id;
-    });
-    callback(null, [retMovementLog])
+    return Promise.all(movementLog.movements.map(movement => {
+      return movementsCollection.findOne({ _id: new ObjectID(movement.id) });
+    }), Promise.resolve());
+  }).then(movements => {
+    retMovementLog.movements = movements;
+    callback(null, [retMovementLog]);
   });
 }
 
-function addMovement(db, date, movement_id, weight, reps, callback) {
-  if (weight != null && reps != null) {
-    db.collection('movement-logs').updateOne({
-      workoutDate: new Date(date),
-      'movements.movement_id': new ObjectID(movement_id)
-    }, {
-      $push: {
-        'movements.$.sets': {
-          weight: weight,
-          reps: reps
-        }
-      }
-    }, (err, r) => {
-      callback(null, r);
-    });
-  } else {
-    // TODO: upsert if it doesnt exist
-    db.collection('movement-logs').updateOne({
-      workoutDate: new Date(date),
-      'movements.movement_id': {$ne: new ObjectID(movement_id)}
-    }, {
-      $push: {
-        movements: {
-          movement_id: new ObjectID(movement_id),
-          sets: []
-        }
-      }
-    }, (err, r) => {
-      callback(null, r);
-    });
-  }
+function addSet(db, date, movement_id, weight, reps, index, callback) {
+  const set_id = new ObjectID();
+  const pushPayload = {};
+  pushPayload['sets.' + movement_id + '.values'] = {
+    weight: weight,
+    reps: reps,
+    id: set_id,
+  };
+  db.collection('movement-logs').updateOne({
+    date: new Date(date)
+  }, { $push: pushPayload }, (err, r) => {
+    callback(err, {set_id: set_id, result: r});
+  });
+}
+
+function removeSet(db, date, movement_id, set_id, callback) {
+  const query = {};
+  query.date = new Date(date);
+  
+  const pullPayload = {};
+  pullPayload['sets.' + movement_id + '.values'] = { id: new ObjectID(set_id) };
+
+  db.collection('movement-logs').updateOne(query, { $pull: pullPayload}, (err, r) => {
+    callback(err, r);
+  });
+}
+
+function updateSet(db, date, movement_id, set_id, weight, reps, callback) {
+  const query = {};
+  query.date = new Date(date);
+  query['sets.' + movement_id + '.values.id'] = new ObjectID(set_id);
+
+  const setPayload = {};
+  setPayload['sets.' + movement_id + '.values.$.weight'] = weight;
+  setPayload['sets.' + movement_id + '.values.$.reps'] = reps;
+
+  db.collection('movement-logs').updateOne(query, {
+    $set: setPayload
+  }, (err, r) => {
+    callback(err, r);
+  });
 }
 
 module.exports = {
   getMovements: getMovements,
   getMovementLogs: getMovementLogs,
-  addMovement: addMovement
+  addSet: addSet,
+  removeSet: removeSet,
+  updateSet: updateSet
 }

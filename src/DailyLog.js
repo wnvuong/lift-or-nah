@@ -8,10 +8,15 @@ class DailyLog extends Component {
         <MovementLog
           key={index}
           index={index}
-          movement={movement}
           date={this.props.date}
+          movement={movement}
+          sets={this.props.sets[movement._id].values}
+
           onSetAdded={this.props.onSetAdded}
-          />
+          onSetRemoved={this.props.onSetRemoved}
+          onRepAdded={this.props.onRepAdded}
+          onRepRemoved={this.props.onRepRemoved}
+        />
       )
     });
     return (
