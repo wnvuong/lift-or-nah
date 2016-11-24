@@ -42,14 +42,7 @@ class App extends Component {
     apihelper.addSet(movement_id, date, weight, reps, this.state.sets[movement_id].values.length).then(res => {
       console.log(res);
       
-      // clone the sets object
-      const clone = Object.getOwnPropertyNames(this.state.sets).reduce((clone, currSet) => {
-        clone[currSet] = {
-          movement_id: this.state.sets[currSet].movement_id, 
-          values: this.state.sets[currSet].values.slice(0, this.state.sets[currSet].values.length)
-        };
-        return clone;
-      }, {});
+      const clone = this.createSetClone();
 
       clone[movement_id].values.push({
         weight: weight,
@@ -64,14 +57,7 @@ class App extends Component {
       console.log(res);
     });
 
-    // clone the sets object
-    const clone = Object.getOwnPropertyNames(this.state.sets).reduce((clone, currSet) => {
-      clone[currSet] = {
-        movement_id: this.state.sets[currSet].movement_id, 
-        values: this.state.sets[currSet].values.slice(0, this.state.sets[currSet].values.length)
-      };
-      return clone;
-    }, {});
+    const clone = this.createSetClone();
 
     clone[movement_id].values.splice(set_index, 1);
     this.setState({ sets: clone });
@@ -116,6 +102,27 @@ class App extends Component {
       console.log(res);
     });
   }
+  handleWeightChanged = (movement_id, date, set_index, set_id, weight) => {
+    const clone = this.createSetClone();
+
+    clone[movement_id].values[set_index].weight = weight;
+
+    this.setState({ sets: clone });
+
+    apihelper.updateSet(movement_id, date, set_id, weight, clone[movement_id].values[set_index].reps).then(res => {
+      console.log(res);
+    });
+  }
+  createSetClone() {
+    return Object.getOwnPropertyNames(this.state.sets).reduce((clone, currSet) => {
+      clone[currSet] = {};
+      clone[currSet].movement_id = this.state.sets[currSet].movement_id;
+      clone[currSet].values = this.state.sets[currSet].values.map(value => {
+        return Object.assign({}, value);
+      });
+      return clone;
+    }, {});
+  }
   render() {
     return (
       <MuiThemeProvider>
@@ -142,6 +149,7 @@ class App extends Component {
               onSetRemoved={this.handleSetRemoved}
               onRepAdded={this.handleRepAdded}
               onRepRemoved={this.handleRepRemoved}
+              onWeightChanged={this.handleWeightChanged}
             />
             <AddMovementModal 
               date={this.state.date} 

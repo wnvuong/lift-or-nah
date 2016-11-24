@@ -16,6 +16,7 @@ class DailyLog extends Component {
           onSetRemoved={this.props.onSetRemoved}
           onRepAdded={this.props.onRepAdded}
           onRepRemoved={this.props.onRepRemoved}
+          onWeightChanged={this.props.onWeightChanged}
         />
       )
     });

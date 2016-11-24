@@ -31,7 +31,7 @@ class MovementLog extends Component {
     return false;
   }
   handleSetAdded = () => {
-    this.props.onSetAdded(this.props.movement._id, this.props.date, this.props.index, 315, 5);
+    this.props.onSetAdded(this.props.movement._id, this.props.date, this.props.index, 135, 5);
   }
   render() {
     let sets = this.props.sets.map((set, set_index) => {
@@ -47,6 +47,7 @@ class MovementLog extends Component {
           onRepAdded={this.props.onRepAdded}
           onRepRemoved={this.props.onRepRemoved}
           onSetRemoved={this.props.onSetRemoved}
+          onWeightChanged={this.props.onWeightChanged}
         />    
       )
     });

@@ -12,46 +12,60 @@ class MovementLogLineItem extends Component {
         this.props.reps !== nextProps.reps) {
       return true;
     }
-    
     return false;
   }
-  handleRepAdded = (set_id, index) => {
-    this.props.onRepAdded(this.props.movement._id, this.props.date, index, set_id);
+  handleRepAdded = (event) => {
+    this.props.onRepAdded(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id);
   }
-  handleRepRemoved = (set_id, index) => {
-    this.props.onRepRemoved(this.props.movement._id, this.props.date, index, set_id);    
+  handleRepRemoved = (event) => {
+    this.props.onRepRemoved(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id);    
   }
-  handleSetRemoved = (set_id, index) => {
-    this.props.onSetRemoved(this.props.movement._id, this.props.date, index, set_id);
+  handleSetRemoved = (event) => {
+    this.props.onSetRemoved(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id);
+  }
+  handleWeightChanged = (event) => {
+    let parsedWeight = parseInt(event.target.value);
+    if (isNaN(parsedWeight)) {
+      parsedWeight = 0;
+    }
+    this.props.onWeightChanged(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id, parsedWeight);
+  }
+  handleWeightAdded = (event) => {
+    this.props.onWeightChanged(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id, this.props.weight + 5)
+  }
+  handleWeightRemoved = (event) => {
+    this.props.onWeightChanged(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id, this.props.weight - 5)
   }
   render() {
     return (
       <div className='movement-log__line-item'>
           <div className='movement-log__weight-container'>
-            <IconButton>
+            <IconButton onTouchTap={this.handleWeightRemoved}>
                 <ContentRemoveCircleOutline />
             </IconButton>
             <TextField className='movement-log__weight'
                 id={this.props.set_id + 'weight'}
                 value={this.props.weight}
                 style={{ width: '40px' }}
+                type='tel'
+                onChange={this.handleWeightChanged}
             />
             <div>&nbsp;lbs</div>
-            <IconButton>
+            <IconButton onTouchTap={this.handleWeightAdded}>
                 <ContentAddCircleOutline />
             </IconButton>
           </div>
           <div className='movement-log__reps-container'>
-            <IconButton onTouchTap={this.handleRepRemoved.bind(this, this.props.set_id, this.props.set_index)}>
+            <IconButton onTouchTap={this.handleRepRemoved}>
                 <ContentRemoveCircleOutline />
             </IconButton>
             <div className='movement-log__reps'>{this.props.reps}</div>
             <div className='movement-log__reps-label'>&nbsp;reps</div>
-            <IconButton onTouchTap={this.handleRepAdded.bind(this, this.props.set_id, this.props.set_index)}>
+            <IconButton onTouchTap={this.handleRepAdded}>
                 <ContentAddCircleOutline />
             </IconButton>
           </div>
-          <IconButton onTouchTap={this.handleSetRemoved.bind(this, this.props.set_id, this.props.set_index)} >
+          <IconButton onTouchTap={this.handleSetRemoved}>
             <ActionDelete />
           </IconButton>
       </div>
