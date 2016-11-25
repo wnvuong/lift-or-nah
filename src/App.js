@@ -53,7 +53,10 @@ class App extends Component {
   }
   handleSetRemoved = (movement_id, date, set_index, set_id) => {
     apihelper.removeSet(movement_id, date, set_id).then(res => {
-      console.log(res);
+      this.setState({ 
+        movements: res[0].movements,
+        sets: res[0].sets 
+      });
     });
 
     const clone = this.createSetClone();

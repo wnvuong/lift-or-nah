@@ -40,7 +40,8 @@ $dark-grey: rgb(68, 68, 68) !default;
 
 /// Container's maximum width
 /// @type Length
-$max-width: 900px !default;
+// $max-width: 900px !default;
+$max-width: 380px !default;
 
 
 
@@ -73,3 +74,7 @@ $base-url: '/assets/' !default;
 /// Material Design Colors
 $grey50: #FAFAFA;
 $grey500: #9E9E9E;
+
+.white {
+  color: white;
+}

@@ -79,7 +79,7 @@ function addSet(movementId, workoutDate, weight, reps, index) {
 }
 
 function removeSet(movementId, workoutDate, set_id) {
-  return del('/movementlogs/' + workoutDate.toISOString() + '/' + movementId + '/' + set_id);
+  return del('/movementlogs/' + workoutDate.toISOString() + '/' + movementId + '/' + set_id).then(JSON.parse);
 }
 
 function updateSet(movementId, workoutDate, set_id, weight, reps) {

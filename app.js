@@ -49,10 +49,9 @@ app.put('/movementlogs/:date/:movement_id', function (req, res) {
 })
 
 app.delete('/movementlogs/:date/:movement_id/:set_id', function (req, res) {
-  MongoHelper.removeSet(database, req.params.date, req.params.movement_id, req.params.set_id, (err, r) => {
-    assert.equal(null, err);
-    res.send(r);
-  });
+  MongoHelper.removeSet(database, req.params.date, req.params.movement_id, req.params.set_id).then(movementLog => {
+    res.send([movementLog]);
+  })
 });
 
 app.put('/movementlogs/:date/:movement_id/:set_id', function (req, res) {

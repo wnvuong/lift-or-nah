@@ -61,3 +61,11 @@
 .hidden {
   display: none;
 }
+
+.flexbox {
+  @include flexbox();
+}
+
+.align-center {
+  @include align-items(center);
+}

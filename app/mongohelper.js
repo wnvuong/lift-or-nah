@@ -72,8 +72,6 @@ function addMovement(db, date, movement_id) {
 }
 
 function addSet(db, date, movement_id, weight, reps, index) {
-  const movementLogscollection = db.collection('movement-logs'); 
-
   const set_id = new ObjectID();
   const pushPayload = {};
   pushPayload['sets.' + movement_id + '.values'] = {
@@ -81,23 +79,57 @@ function addSet(db, date, movement_id, weight, reps, index) {
     reps: reps,
     id: set_id,
   };
-  return addMovement(db, date, movement_id).then(result => {
-    return db.collection('movement-logs').updateOne({ date: new Date(date) }, { $push: pushPayload });
+  
+  const setPayload = {};
+  setPayload['sets.' + movement_id + '.movement_id'] = new ObjectID(movement_id);
+
+  const addToSetPayload = {};
+  addToSetPayload.movements = { 
+    id: new ObjectID(movement_id) 
+  };
+
+  return db.collection('movement-logs').updateOne({
+    date: new Date(date)
+  }, {
+    $addToSet: addToSetPayload,
+    $set: setPayload,
+    $push: pushPayload
   }).then(result => {
-    return getMovementLogs(db, date);
-  }); 
+    return getMovementLogs(db, date);   
+  });
 }
 
-function removeSet(db, date, movement_id, set_id, callback) {
+function removeSet(db, date, movement_id, set_id) {
   const query = {};
   query.date = new Date(date);
   
   const pullPayload = {};
   pullPayload['sets.' + movement_id + '.values'] = { id: new ObjectID(set_id) };
 
-  db.collection('movement-logs').updateOne(query, { $pull: pullPayload}, (err, r) => {
-    callback(err, r);
+  return db.collection('movement-logs').findOneAndUpdate(query, {
+    $pull: pullPayload
+  }, {
+    returnOriginal: false
+  }).then(result => {
+    assert.equal(1, result.ok);
+    if (result.value.sets[movement_id].values.length == 0) {
+      const unsetPayload = {};
+      unsetPayload['sets.' + movement_id] = '';
+      return db.collection('movement-logs').findOneAndUpdate(query, {
+        $pull: { movements: { id: new ObjectID(movement_id) } },
+        $unset: unsetPayload
+      }).then(result => {
+        assert.equal(1, result.ok);    
+        return getMovementLogs(db, date);      
+      });
+    } else {
+      return getMovementLogs(db, date);      
+    }
   });
+
+  // return db.collection('movement-logs').updateOne(query, { $pull: pullPayload }).then(result => {
+  //   return getMovementLogs(db, date);
+  // });
 }
 
 function updateSet(db, date, movement_id, set_id, weight, reps, callback) {

@@ -43,13 +43,25 @@ class AddMovementModal extends Component {
     });
     return (
       <div>
-        <div className={(this.state.isVisible ? 'add-movement-modal-container--visible' : '') + ' add-movement-modal-container'}>
+        <div className={(this.state.isVisible ? 'add-movement-modal-container--visible' : '') + ' add-movement-modal-container '}>
           <AppBar
-            title='Add Movement'
-            iconElementLeft={<IconButton><NavigationClose /></IconButton>}
-            onLeftIconButtonTouchTap={this.handleCloseModal}
+            className='app-bar'
+            showMenuIconButton={false}
+            style={{paddingLeft: 0, paddingRight: 0}}
+            title={
+              <div className='content-container flexbox align-center'>
+                <IconButton 
+                  style={{ marginRight: '5px' }}
+                  onTouchTap={this.handleCloseModal}>
+                  <NavigationClose color='white' />
+                </IconButton>
+                <h1 className='app-header'>
+                  <strong>Add Movement</strong>
+                </h1>
+              </div>
+            }
           />
-          <List>
+          <List className='content-container'>
             {movementViews}
           </List>
         </div>
