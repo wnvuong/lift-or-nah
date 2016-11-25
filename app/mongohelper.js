@@ -94,6 +94,8 @@ function addSet(db, date, movement_id, weight, reps, index) {
     $addToSet: addToSetPayload,
     $set: setPayload,
     $push: pushPayload
+  }, {
+    upsert: true
   }).then(result => {
     return getMovementLogs(db, date);   
   });

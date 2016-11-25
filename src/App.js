@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
+import DatePicker from 'material-ui/DatePicker';
+import { fullWhite } from 'material-ui/styles/colors';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
@@ -8,15 +10,24 @@ import AppContent from './AppContent.js';
 import apihelper from './utils/apihelper.js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import update from 'immutability-helper';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 injectTapEventPlugin();
+
+const muiTheme = getMuiTheme({
+  datePicker: {
+    color: fullWhite,
+    textColor: fullWhite,
+    calendarTextColor: fullWhite
+  }
+});
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      date: new Date(2016, 10, 11),
+      date: new Date(),
       _id: null,
       movements: [],
       sets: {}
@@ -127,17 +138,25 @@ class App extends Component {
   }
   render() {
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <AppBar 
             className='app-bar'
             style={{position: 'fixed'}}
             title={
               <div className='content-container'>
+                {/*<DatePicker className='app-header'
+                  hintText={this.state.date.toLocaleDateString()}
+                  defaultDate={this.state.date}
+                  style={{ color: fullWhite}}
+                  textFieldStyle={{ color: fullWhite}}
+                  
+                />*/}
                 <h1 className='app-header'>
                   <strong>{this.state.date.toLocaleDateString()}</strong>
                 </h1>
               </div>
+              
             }
             iconElementLeft={<div />}
           />

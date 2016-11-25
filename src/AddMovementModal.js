@@ -6,6 +6,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import apihelper from './utils/apihelper.js';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 class AddMovementModal extends Component {
   constructor(props) {
@@ -38,33 +40,30 @@ class AddMovementModal extends Component {
           primaryText={movement.name}
           disabled={this.props.sets[movement._id] !== undefined}
           onTouchTap={this.handleMovementSelected.bind(this, movement)} 
+          innerDivStyle={{paddingLeft: '24px', paddingRight: '24px' }}
         />            
       )
     });
     return (
       <div>
-        <div className={(this.state.isVisible ? 'add-movement-modal-container--visible' : '') + ' add-movement-modal-container '}>
-          <AppBar
-            className='app-bar'
-            showMenuIconButton={false}
-            style={{paddingLeft: 0, paddingRight: 0}}
-            title={
-              <div className='content-container flexbox align-center'>
-                <IconButton 
-                  style={{ marginRight: '5px' }}
-                  onTouchTap={this.handleCloseModal}>
-                  <NavigationClose color='white' />
-                </IconButton>
-                <h1 className='app-header'>
-                  <strong>Add Movement</strong>
-                </h1>
-              </div>
-            }
-          />
-          <List className='content-container'>
+        <Dialog
+          title="Add Movement"
+          actions={[
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onTouchTap={this.handleCloseModal}
+            />
+          ]}
+          modal={false}
+          open={this.state.isVisible}
+          onRequestClose={this.handleCloseModal}
+          contentStyle={{maxWidth: '380px'}}
+          bodyStyle={{padding: 0}}>
+          <List>
             {movementViews}
           </List>
-        </div>
+        </Dialog>
         <FloatingActionButton secondary={true} className='daily-log__add' onTouchTap={this.handleShowModal}>
           <ContentAdd />
         </FloatingActionButton>
