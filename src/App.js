@@ -39,17 +39,16 @@ class App extends Component {
     }
   }
   handleSetAdded = (movement_id, date, movement_index, weight, reps) => {
-    apihelper.addSet(movement_id, date, weight, reps, this.state.sets[movement_id].values.length).then(res => {
-      console.log(res);
-      
-      const clone = this.createSetClone();
+    let position = 0;
+    if (this.state.sets[movement_id] !== undefined) {
+      position = this.state.sets[movement_id].length;
+    }
 
-      clone[movement_id].values.push({
-        weight: weight,
-        reps: reps,
-        id: res.set_id  
+    apihelper.addSet(movement_id, date, weight, reps, position).then(res => {
+      this.setState({ 
+        movements: res[0].movements,
+        sets: res[0].sets 
       });
-      this.setState({ sets: clone });
     });
   }
   handleSetRemoved = (movement_id, date, set_index, set_id) => {
@@ -154,7 +153,8 @@ class App extends Component {
             <AddMovementModal 
               date={this.state.date} 
               movements={this.state.movements}
-              onMovementAdded={this.handleMovementAdded} 
+              onSetAdded={this.handleSetAdded}
+              sets={this.state.sets}
             />        
           </AppContent>
         </div>

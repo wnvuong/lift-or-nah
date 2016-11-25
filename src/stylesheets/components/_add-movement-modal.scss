@@ -11,6 +11,24 @@
   &--visible {
     transform: translateY(-100vh);
   }
+
+  &__title {
+    display: flex;
+
+    h2 {
+      margin: 0;
+      height: 72px;
+      line-height: 72px;
+    }
+  }
+
+  &__line-item {
+    &--disabled {
+      div {
+        color: $grey500;
+      }
+    }
+  }
 }
 
 .add-movement-modal-container__modal {

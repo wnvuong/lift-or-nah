@@ -38,24 +38,42 @@ function getMovements(db, callback) {
   findDocuments(db, 'movements', callback);
 }
 
-function getMovementLogs(db, params, callback) {
+function getMovementLogs(db, date) {
   assert.notEqual(null, db);
   const movementLogscollection = db.collection('movement-logs'); 
   const movementsCollection = db.collection('movements');
 
   let retMovementLog = null;
-  movementLogscollection.findOne({ date: new Date(params.date) }).then(movementLog => {
+  return movementLogscollection.findOne({ date: new Date(date) }).then(movementLog => {
     retMovementLog = movementLog;
     return Promise.all(movementLog.movements.map(movement => {
       return movementsCollection.findOne({ _id: new ObjectID(movement.id) });
     }), Promise.resolve());
   }).then(movements => {
     retMovementLog.movements = movements;
-    callback(null, [retMovementLog]);
+    return retMovementLog;
   });
 }
 
-function addSet(db, date, movement_id, weight, reps, index, callback) {
+function addMovement(db, date, movement_id) {
+  const setPayload = {};
+  setPayload['sets.' + movement_id + '.id'] = new ObjectID(movement_id);
+
+  return db.collection('movement-logs').updateOne({ 
+    date: new Date(date) 
+  }, { 
+    $addToSet: { 
+      'movements': { 
+        id: new ObjectID(movement_id) 
+      } 
+    },
+    $set: setPayload
+  });
+}
+
+function addSet(db, date, movement_id, weight, reps, index) {
+  const movementLogscollection = db.collection('movement-logs'); 
+
   const set_id = new ObjectID();
   const pushPayload = {};
   pushPayload['sets.' + movement_id + '.values'] = {
@@ -63,11 +81,11 @@ function addSet(db, date, movement_id, weight, reps, index, callback) {
     reps: reps,
     id: set_id,
   };
-  db.collection('movement-logs').updateOne({
-    date: new Date(date)
-  }, { $push: pushPayload }, (err, r) => {
-    callback(err, {set_id: set_id, result: r});
-  });
+  return addMovement(db, date, movement_id).then(result => {
+    return db.collection('movement-logs').updateOne({ date: new Date(date) }, { $push: pushPayload });
+  }).then(result => {
+    return getMovementLogs(db, date);
+  }); 
 }
 
 function removeSet(db, date, movement_id, set_id, callback) {

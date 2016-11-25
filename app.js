@@ -23,9 +23,8 @@ app.get('/movements', function (req, res) {
 })
 
 app.get('/movementlogs/:date?', (req, res) => {
-  MongoHelper.getMovementLogs(database, req.params, function(err, docs) {
-    assert.equal(null, err);
-    res.send(docs);
+  MongoHelper.getMovementLogs(database, req.params.date).then(movementLog => {
+    res.send([movementLog]);
   });
 })
 
@@ -44,10 +43,9 @@ app.put('/movementlogs/:date/:movement_id', function (req, res) {
       index = req.body.index;
     }
   }
-  MongoHelper.addSet(database, req.params.date, req.params.movement_id, weight, reps, index, (err, r) => {
-    assert.equal(null, err);
-    res.send(r);
-  })
+  MongoHelper.addSet(database, req.params.date, req.params.movement_id, weight, reps, index).then(movementLog => {
+    res.send([movementLog]);
+  });
 })
 
 app.delete('/movementlogs/:date/:movement_id/:set_id', function (req, res) {
