@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
 import DatePicker from 'material-ui/DatePicker';
-import { fullWhite } from 'material-ui/styles/colors';
+
+import { teal500, teal700 } from 'material-ui/styles/colors';
+import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
@@ -15,25 +17,29 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
-  datePicker: {
-    color: fullWhite,
-    textColor: fullWhite,
-    calendarTextColor: fullWhite
+  palette: {
+    primary1Color: teal500,
+    primary2Color: teal700
   }
 });
 
 class App extends Component {
   constructor(props) {
     super(props);
+    
+    const today = new Date();
 
     this.state = {
-      date: new Date(),
+      date: today,
       _id: null,
       movements: [],
       sets: {}
     };
-
-    apihelper.getMovementLogs(this.state.date).then(movementLogs => {
+    this.getMovementLog(today);
+  }
+  getMovementLog = (date) => {
+    console.log(date);
+    apihelper.getMovementLogs(date).then(movementLogs => {
       console.log(movementLogs)
       movementLogs[0].date = new Date(movementLogs[0].date);
       this.setState(movementLogs[0]); 
@@ -126,6 +132,11 @@ class App extends Component {
       console.log(res);
     });
   }
+  handleDateChanged = (event, date) => {
+    // console.log(date);
+    this.setState({ date: date });
+    this.getMovementLog(date);
+  }
   createSetClone() {
     return Object.getOwnPropertyNames(this.state.sets).reduce((clone, currSet) => {
       clone[currSet] = {};
@@ -138,49 +149,53 @@ class App extends Component {
   }
   render() {
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
-          <AppBar 
-            className='app-bar'
-            style={{position: 'fixed'}}
-            title={
-              <div className='content-container'>
-                {/*<DatePicker className='app-header'
-                  hintText={this.state.date.toLocaleDateString()}
-                  defaultDate={this.state.date}
-                  style={{ color: fullWhite}}
-                  textFieldStyle={{ color: fullWhite}}
-                  
-                />*/}
-                <h1 className='app-header'>
-                  <strong>{this.state.date.toLocaleDateString()}</strong>
-                </h1>
-              </div>
-              
-            }
-            iconElementLeft={<div />}
-          />
-          <AppContent>
-            <DailyLog 
-              className='content-container' 
-              date={this.state.date}
-              movements={this.state.movements}
-              sets={this.state.sets}
-              onSetAdded={this.handleSetAdded}
-              onSetRemoved={this.handleSetRemoved}
-              onRepAdded={this.handleRepAdded}
-              onRepRemoved={this.handleRepRemoved}
-              onWeightChanged={this.handleWeightChanged}
+        <MuiThemeProvider muiTheme={muiTheme}>
+          <div>
+            <AppBar 
+              className='app-bar'
+              style={{position: 'fixed'}}
+              title={
+                <div className='content-container'>
+                  <h1 className='app-header' 
+                    style={{ cursor: 'pointer' }}
+                    onTouchTap={(e) => { this.dateInput.focus(); }}
+                  >
+                    <strong>{this.state.date.toLocaleDateString()}</strong>
+                    <NavigationArrowDropDown color='white' />
+                    <DatePicker 
+                      autoOk={true}
+                      id='movement-date'
+                      style={{visibility: 'hidden'}} 
+                      ref={(dateInput) => { this.dateInput = dateInput; }} 
+                      onChange={this.handleDateChanged}
+                    />
+                  </h1>
+                </div>
+              }
+              zDepth={2}
+              iconElementLeft={<div />}
             />
-            <AddMovementModal 
-              date={this.state.date} 
-              movements={this.state.movements}
-              onSetAdded={this.handleSetAdded}
-              sets={this.state.sets}
-            />        
-          </AppContent>
-        </div>
-      </MuiThemeProvider>
+            <AppContent>
+              <DailyLog 
+                className='content-container' 
+                date={this.state.date}
+                movements={this.state.movements}
+                sets={this.state.sets}
+                onSetAdded={this.handleSetAdded}
+                onSetRemoved={this.handleSetRemoved}
+                onRepAdded={this.handleRepAdded}
+                onRepRemoved={this.handleRepRemoved}
+                onWeightChanged={this.handleWeightChanged}
+              />
+              <AddMovementModal 
+                date={this.state.date} 
+                movements={this.state.movements}
+                onSetAdded={this.handleSetAdded}
+                sets={this.state.sets}
+              />        
+            </AppContent>
+          </div>
+        </MuiThemeProvider>
     );
   }
 }

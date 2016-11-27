@@ -9,5 +9,7 @@
     font-weight: 400;
     height: 64px;
     line-height: 64px;
-    flex: 1 1 0%;
+    // flex: 1 1 0%;
+    display: inline-flex;
+    align-items: center;
 }

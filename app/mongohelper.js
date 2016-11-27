@@ -45,13 +45,19 @@ function getMovementLogs(db, date) {
 
   let retMovementLog = null;
   return movementLogscollection.findOne({ date: new Date(date) }).then(movementLog => {
-    retMovementLog = movementLog;
-    return Promise.all(movementLog.movements.map(movement => {
-      return movementsCollection.findOne({ _id: new ObjectID(movement.id) });
-    }), Promise.resolve());
+    if (movementLog !== null) {
+      retMovementLog = movementLog;
+      return Promise.all(movementLog.movements.map(movement => {
+        return movementsCollection.findOne({ _id: new ObjectID(movement.id) });
+      }), Promise.resolve());
+    } else {
+      throw null;
+    }
   }).then(movements => {
     retMovementLog.movements = movements;
     return retMovementLog;
+  }).catch(err => {
+    return { date: date, movements: [], sets: [] };
   });
 }
 

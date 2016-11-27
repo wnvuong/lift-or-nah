@@ -24,7 +24,7 @@ class MovementLogLineItem extends Component {
     this.props.onSetRemoved(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id);
   }
   handleWeightChanged = (event) => {
-    let parsedWeight = parseInt(event.target.value);
+    let parsedWeight = parseInt(event.target.value, 10);
     if (isNaN(parsedWeight)) {
       parsedWeight = 0;
     }

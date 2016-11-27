@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import AppBar from 'material-ui/AppBar';
+
 import { List, ListItem } from 'material-ui/List';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import apihelper from './utils/apihelper.js';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
