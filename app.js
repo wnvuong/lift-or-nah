@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const MongoHelper = require('./app/mongohelper.js');
+const DateHelper = require('./app/datehelper.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const assert = require('assert');
@@ -21,7 +22,7 @@ const cleanDate = (req, res, next) => {
   date.setMinutes(0);
   date.setSeconds(0);
   date.setMilliseconds(0);
-  req.params.date = date.toISOString();
+  req.params.date = DateHelper.formatLocalDate(date);
   next();
 };
 

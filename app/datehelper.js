@@ -1,12 +1,3 @@
-function todayUtc() {
-  let today = new Date();
-  today.setHours(0);
-  today.setMinutes(0);
-  today.setSeconds(0);
-  today.setMilliseconds(0);
-  return today;
-}
-
 function formatLocalDate(date) {
     var tzo = -date.getTimezoneOffset(),
         dif = tzo >= 0 ? '+' : '-',
@@ -24,9 +15,6 @@ function formatLocalDate(date) {
         + ':' + pad(tzo % 60);
 }
 
-const datehelper = {
-  todayUtc: todayUtc,
+module.exports = {
   formatLocalDate: formatLocalDate
 }
-
-export default datehelper;

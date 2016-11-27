@@ -168,6 +168,7 @@ class App extends Component {
                       style={{visibility: 'hidden'}} 
                       ref={(dateInput) => { this.dateInput = dateInput; }} 
                       onChange={this.handleDateChanged}
+                      firstDayOfWeek={0}
                     />
                   </h1>
                 </div>
