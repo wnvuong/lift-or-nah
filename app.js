@@ -1,6 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
 const MongoHelper = require('./app/mongohelper.js');
-const DateHelper = require('./app/datehelper.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const assert = require('assert');
@@ -16,16 +15,6 @@ let database = null;
 app.use(express.static('build'));
 app.use(bodyParser.json());
 
-const cleanDate = (req, res, next) => {
-  let date = new Date(req.params.date);
-  date.setHours(0)
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
-  req.params.date = DateHelper.formatLocalDate(date);
-  next();
-};
-
 app.get('/movements', function (req, res) {
   MongoHelper.getMovements(database, (err, docs) => {
     assert.equal(null, err);
@@ -33,13 +22,13 @@ app.get('/movements', function (req, res) {
   });
 })
 
-app.get('/movementlogs/:date?', cleanDate, (req, res) => {
+app.get('/movementlogs/:date?', (req, res) => {
   MongoHelper.getMovementLogs(database, req.params.date).then(movementLog => {
     res.send([movementLog]);
   });
 })
 
-app.put('/movementlogs/:date/:movement_id', cleanDate, (req, res) => {
+app.put('/movementlogs/:date/:movement_id', (req, res) => {
   let weight = null;
   let reps = null;
   let index = null;
@@ -59,13 +48,13 @@ app.put('/movementlogs/:date/:movement_id', cleanDate, (req, res) => {
   });
 })
 
-app.delete('/movementlogs/:date/:movement_id/:set_id', cleanDate, (req, res) => {
+app.delete('/movementlogs/:date/:movement_id/:set_id', (req, res) => {
   MongoHelper.removeSet(database, req.params.date, req.params.movement_id, req.params.set_id).then(movementLog => {
     res.send([movementLog]);
   })
 });
 
-app.put('/movementlogs/:date/:movement_id/:set_id', cleanDate, (req, res) => {
+app.put('/movementlogs/:date/:movement_id/:set_id', (req, res) => {
   MongoHelper.updateSet(database, req.params.date, req.params.movement_id, req.params.set_id, req.body.weight, req.body.reps, (err, r) => {
     assert.equal(null, err);
     res.send(r);
