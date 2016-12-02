@@ -4,6 +4,7 @@ import ContentAddCircleOutline from 'material-ui/svg-icons/content/add-circle-ou
 import ContentRemoveCircleOutline from 'material-ui/svg-icons/content/remove-circle-outline';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import TextField from 'material-ui/TextField';
+import { grey800 } from 'material-ui/styles/colors';
 
 class MovementLogLineItem extends Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -41,7 +42,7 @@ class MovementLogLineItem extends Component {
       <div className='movement-log__line-item'>
           <div className='movement-log__weight-container'>
             <IconButton onTouchTap={this.handleWeightRemoved}>
-                <ContentRemoveCircleOutline />
+                <ContentRemoveCircleOutline color={ grey800 } />
             </IconButton>
             <TextField className='movement-log__weight'
                 id={this.props.set_id + 'weight'}
@@ -52,21 +53,21 @@ class MovementLogLineItem extends Component {
             />
             <div>&nbsp;lbs</div>
             <IconButton onTouchTap={this.handleWeightAdded}>
-                <ContentAddCircleOutline />
+                <ContentAddCircleOutline color={ grey800 }/>
             </IconButton>
           </div>
           <div className='movement-log__reps-container'>
             <IconButton onTouchTap={this.handleRepRemoved}>
-                <ContentRemoveCircleOutline />
+                <ContentRemoveCircleOutline color={ grey800 } />
             </IconButton>
             <div className='movement-log__reps'>{this.props.reps}</div>
             <div className='movement-log__reps-label'>&nbsp;reps</div>
             <IconButton onTouchTap={this.handleRepAdded}>
-                <ContentAddCircleOutline />
+                <ContentAddCircleOutline color={ grey800 } />
             </IconButton>
           </div>
           <IconButton onTouchTap={this.handleSetRemoved}>
-            <ActionDelete />
+            <ActionDelete color={ grey800 } />
           </IconButton>
       </div>
     )
