@@ -81,24 +81,26 @@ class App extends Component {
     this.setState({ sets: clone });
   }
   handleRepRemoved = (movement_id, date, set_index, set_id) => {
-    const changesToMake = {};
-    changesToMake[movement_id] = {};
-    changesToMake[movement_id].values = {};
-    changesToMake[movement_id].values[set_index] = {
-      reps: {
-        $apply: (reps) => { return reps - 1; }
-      }
-    };
-    const sets = update(this.state.sets, changesToMake);
-    
-    this.setState({ sets: sets });
+    if (this.state.sets[movement_id].values[set_index].reps > 0) {
+      const changesToMake = {};
+      changesToMake[movement_id] = {};
+      changesToMake[movement_id].values = {};
+      changesToMake[movement_id].values[set_index] = {
+        reps: {
+          $apply: (reps) => { return reps - 1; }
+        }
+      };
+      const sets = update(this.state.sets, changesToMake);
+      
+      this.setState({ sets: sets });
 
-    const weight = sets[movement_id].values[set_index].weight;
-    const reps = sets[movement_id].values[set_index].reps;
+      const weight = sets[movement_id].values[set_index].weight;
+      const reps = sets[movement_id].values[set_index].reps;
 
-    apihelper.updateSet(movement_id, date, set_id, weight, reps).then(res => {
-      console.log(res);
-    });
+      apihelper.updateSet(movement_id, date, set_id, weight, reps).then(res => {
+        console.log(res);
+      });
+    }
   }
   handleRepAdded = (movement_id, date, set_index, set_id) => {
     const changesToMake = {};
