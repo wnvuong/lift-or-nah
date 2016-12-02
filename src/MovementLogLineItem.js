@@ -38,36 +38,53 @@ class MovementLogLineItem extends Component {
     this.props.onWeightChanged(this.props.movement._id, this.props.date, this.props.set_index, this.props.set_id, this.props.weight - 5)
   }
   render() {
-    return (
-      <div className='movement-log__line-item'>
-          <div className='movement-log__weight-container'>
-            <IconButton onTouchTap={this.handleWeightRemoved}>
-                <ContentRemoveCircleOutline color={ grey800 } />
-            </IconButton>
-            <TextField className='movement-log__weight'
+    let weight = this.props.editing ? <TextField className='movement-log__weight'
                 id={this.props.set_id + 'weight'}
                 value={this.props.weight}
                 style={{ width: '40px' }}
                 type='tel'
+                disabled={!this.props.editing}
                 onChange={this.handleWeightChanged}
-            />
+            /> : <div>{this.props.weight}</div>
+    return (
+      <div className='movement-log__line-item'>
+          <div className='movement-log__weight-container'>
+            <IconButton 
+              onTouchTap={this.handleWeightRemoved}
+              disabled={!this.props.editing}
+            >
+                <ContentRemoveCircleOutline color={ grey800 } />
+            </IconButton>
+            {weight}
             <div>&nbsp;lbs</div>
-            <IconButton onTouchTap={this.handleWeightAdded}>
+            <IconButton 
+              onTouchTap={this.handleWeightAdded}
+              disabled={!this.props.editing}
+            >
                 <ContentAddCircleOutline color={ grey800 }/>
             </IconButton>
           </div>
           <div className='movement-log__reps-container'>
-            <IconButton onTouchTap={this.handleRepRemoved}>
+            <IconButton 
+              onTouchTap={this.handleRepRemoved}
+              disabled={!this.props.editing}
+            >
                 <ContentRemoveCircleOutline color={ grey800 } />
             </IconButton>
             <div className='movement-log__reps'>{this.props.reps}</div>
             <div className='movement-log__reps-label'>&nbsp;reps</div>
-            <IconButton onTouchTap={this.handleRepAdded}>
+            <IconButton 
+              onTouchTap={this.handleRepAdded}
+              disabled={!this.props.editing}
+            >
                 <ContentAddCircleOutline color={ grey800 } />
             </IconButton>
           </div>
-          <IconButton onTouchTap={this.handleSetRemoved}>
-            <ActionDelete color={ grey800 } />
+          <IconButton 
+            onTouchTap={this.handleSetRemoved}
+            disabled={!this.props.editing}
+          >
+          <ActionDelete color={ grey800 } />
           </IconButton>
       </div>
     )

@@ -23,17 +23,18 @@ const muiTheme = getMuiTheme({
   }
 });
 
+const today = new Date();
+
 class App extends Component {
   constructor(props) {
     super(props);
     
-    const today = new Date();
-
     this.state = {
       date: today,
       _id: null,
       movements: [],
-      sets: {}
+      sets: {},
+      editing: true
     };
     this.getMovementLog(today);
   }
@@ -134,7 +135,14 @@ class App extends Component {
     });
   }
   handleDateChanged = (event, date) => {
-    // console.log(date);
+    if (today.getDay() !== date.getDay() ||
+    today.getMonth() !== date.getMonth() ||
+    today.getFullYear() !== date.getFullYear()) {
+      this.setState({ editing: false });
+    } else {
+      this.setState({ editing: true });
+    }
+    
     this.setState({ date: date });
     this.getMovementLog(date);
   }
@@ -188,12 +196,14 @@ class App extends Component {
                 onRepAdded={this.handleRepAdded}
                 onRepRemoved={this.handleRepRemoved}
                 onWeightChanged={this.handleWeightChanged}
+                editing={this.state.editing}
               />
               <AddMovementModal 
                 date={this.state.date} 
                 movements={this.state.movements}
                 onSetAdded={this.handleSetAdded}
                 sets={this.state.sets}
+                editing={this.state.editing}
               />        
             </AppContent>
           </div>

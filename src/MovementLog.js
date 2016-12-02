@@ -54,6 +54,7 @@ class MovementLog extends Component {
           onRepRemoved={this.props.onRepRemoved}
           onSetRemoved={this.props.onSetRemoved}
           onWeightChanged={this.props.onWeightChanged}
+          editing={this.props.editing}
         />    
       )
     });
@@ -73,6 +74,7 @@ class MovementLog extends Component {
             labelStyle={{ paddingLeft: '8px', paddingRight: '8px'}} 
             style={{minWidth: 0}}
             onTouchTap={this.handleSetAdded} 
+            disabled={!this.props.editing}
           />
         </CardActions>
       </Card>

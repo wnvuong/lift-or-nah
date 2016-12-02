@@ -62,7 +62,12 @@ class AddMovementModal extends Component {
             {movementViews}
           </List>
         </Dialog>
-        <FloatingActionButton secondary={true} className='daily-log__add' onTouchTap={this.handleShowModal}>
+        <FloatingActionButton 
+          secondary={true} 
+          className='daily-log__add' 
+          onTouchTap={this.handleShowModal}
+          disabled={!this.props.editing}
+        >
           <ContentAdd />
         </FloatingActionButton>
       </div>
