@@ -38,7 +38,6 @@ class App extends Component {
     this.getMovementLog(today);
   }
   getMovementLog = (date) => {
-    console.log(date);
     apihelper.getMovementLogs(date).then(movementLogs => {
       console.log(movementLogs)
       movementLogs[0].date = new Date(movementLogs[0].date);
