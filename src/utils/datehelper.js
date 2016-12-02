@@ -7,13 +7,22 @@ function todayUtc() {
   return today;
 }
 
-function formatLocalDate(date) {
+function setToMidnight(date) {
+  if (date != null) {
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+  }
+}
+
+function toISOStringWithOffset(date) {
     var tzo = -date.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = (num) => {
-            var norm = Math.abs(Math.floor(num));
-            return (norm < 10 ? '0' : '') + norm;
-        };
+      dif = tzo >= 0 ? '+' : '-',
+      pad = (num) => {
+          var norm = Math.abs(Math.floor(num));
+          return (norm < 10 ? '0' : '') + norm;
+      };
     let isoString = date.getFullYear() 
         + '-' + pad(date.getMonth()+1)
         + '-' + pad(date.getDate())
@@ -23,6 +32,11 @@ function formatLocalDate(date) {
         + dif + pad(tzo / 60) 
         + ':' + pad(tzo % 60);
     return isoString;
+}
+
+function formatLocalDate(date) {
+  setToMidnight(date);
+  return toISOStringWithOffset(date);
 }
 
 const datehelper = {
