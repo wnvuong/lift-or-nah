@@ -26,7 +26,7 @@ class AddMovementModal extends Component {
     this.setState({ isVisible: false });
   }
   handleMovementSelected = (movement) => {
-    this.props.onSetAdded(movement._id, this.props.date, this.props.index, 135, 5);
+    this.props.onSetAdded(movement._id, this.props.date, this.props.index, 135, 0);
     this.setState({ isVisible: false });
   }
   render() {
