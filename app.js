@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
-const MongoHelper = require('./app/mongohelper.js');
+const MongoHelper = require('./utils/mongohelper.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const assert = require('assert');
