@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
 import DatePicker from 'material-ui/DatePicker';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import { teal500, teal700 } from 'material-ui/styles/colors';
 import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
@@ -34,7 +35,8 @@ class App extends Component {
       _id: null,
       movements: [],
       sets: {},
-      editing: true
+      editing: true,
+      loading: true
     };
     this.getMovementLog(today);
   }
@@ -43,6 +45,7 @@ class App extends Component {
       console.log(movementLogs)
       movementLogs[0].date = new Date(movementLogs[0].date);
       this.setState(movementLogs[0]); 
+      this.setState({ loading: false })
     });
   }
   handleMovementAdded = (movement) => {
@@ -144,6 +147,7 @@ class App extends Component {
     }
     
     this.setState({ date: date });
+    this.setState({ loading: true });
     this.getMovementLog(date);
   }
   createSetClone() {
@@ -186,6 +190,13 @@ class App extends Component {
               iconElementLeft={<div />}
             />
             <AppContent>
+              {this.state.loading && 
+                <CircularProgress 
+                  className='daily-log__loading-indicator'
+                  style={{display: 'block'}}
+                  size={60} thickness={7} 
+                />
+              }
               <DailyLog 
                 className='content-container' 
                 date={this.state.date}

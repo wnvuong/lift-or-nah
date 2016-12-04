@@ -1,5 +1,9 @@
 .daily-log {
   padding: 20px 0 100px 0;
+
+  &__loading-indicator {
+    margin: 0 auto;
+  }
 }
 
 .daily-log__add {
