@@ -57,18 +57,18 @@ function getJSON(url) {
 }
 
 function getMovements() {
-  return getJSON('/movements');
+  return getJSON('movements');
 }
 
 function getMovementLogs(date) {
   if (date != null) {
-    return getJSON('/movementlogs/' + DateHelper.formatLocalDate(date));
+    return getJSON('movementlogs/' + DateHelper.formatLocalDate(date));
   }
-  return getJSON('/movementlogs');
+  return getJSON('movementlogs');
 }
 
 function addMovement(movementId, workoutDate) {
-  return put('/movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId).then(JSON.parse);
+  return put('movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId).then(JSON.parse);
 }
 
 function addSet(movementId, workoutDate, weight, reps, index) {
@@ -77,11 +77,11 @@ function addSet(movementId, workoutDate, weight, reps, index) {
     reps: reps,
     index: index
   }
-  return put('/movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId, data).then(JSON.parse);
+  return put('movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId, data).then(JSON.parse);
 }
 
 function removeSet(movementId, workoutDate, set_id) {
-  return del('/movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId + '/' + set_id).then(JSON.parse);
+  return del('movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId + '/' + set_id).then(JSON.parse);
 }
 
 function updateSet(movementId, workoutDate, set_id, weight, reps) {
@@ -89,7 +89,7 @@ function updateSet(movementId, workoutDate, set_id, weight, reps) {
     weight: weight,
     reps: reps
   }
-  return put('/movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId + '/' + set_id, data).then(JSON.parse);
+  return put('movementlogs/' + DateHelper.formatLocalDate(workoutDate) + '/' + movementId + '/' + set_id, data).then(JSON.parse);
 }
 
 var api = {
