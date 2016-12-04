@@ -94,5 +94,6 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:8000"
+  "proxy": "http://localhost:8000",
+  "homepage": "http://williamvuong.com/lift-ledger"
 }
