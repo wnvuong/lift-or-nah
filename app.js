@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const assert = require('assert');
 const app = express();
+const router = express.Router();
 
 let mongoURL = 'mongodb://localhost:27017/lift-or-nah';
 if (process.env.NODE_ENV === 'production') {
@@ -12,23 +13,23 @@ if (process.env.NODE_ENV === 'production') {
 
 let database = null;
 
-app.use(express.static('build'));
-app.use(bodyParser.json());
+router.use(express.static('build'));
+router.use(bodyParser.json());
 
-app.get('/movements', function (req, res) {
+router.get('/movements', function (req, res) {
   MongoHelper.getMovements(database, (err, docs) => {
     assert.equal(null, err);
     res.send(docs);
   });
 })
 
-app.get('/movementlogs/:date?', (req, res) => {
+router.get('/movementlogs/:date?', (req, res) => {
   MongoHelper.getMovementLogs(database, req.params.date).then(movementLog => {
     res.send([movementLog]);
   });
 })
 
-app.put('/movementlogs/:date/:movement_id', (req, res) => {
+router.put('/movementlogs/:date/:movement_id', (req, res) => {
   let weight = null;
   let reps = null;
   let index = null;
@@ -48,18 +49,25 @@ app.put('/movementlogs/:date/:movement_id', (req, res) => {
   });
 })
 
-app.delete('/movementlogs/:date/:movement_id/:set_id', (req, res) => {
+router.delete('/movementlogs/:date/:movement_id/:set_id', (req, res) => {
   MongoHelper.removeSet(database, req.params.date, req.params.movement_id, req.params.set_id).then(movementLog => {
     res.send([movementLog]);
   })
 });
 
-app.put('/movementlogs/:date/:movement_id/:set_id', (req, res) => {
+router.put('/movementlogs/:date/:movement_id/:set_id', (req, res) => {
   MongoHelper.updateSet(database, req.params.date, req.params.movement_id, req.params.set_id, req.body.weight, req.body.reps, (err, r) => {
     assert.equal(null, err);
     res.send(r);
   });
 });
+
+
+if (process.env.NODE_ENV === 'production') { 
+  app.use('/lift-ledger', router);
+} else {
+  app.use('/', router);
+}
 
 MongoClient.connect(mongoURL, function(err, db) {
   assert.equal(null, err);
@@ -67,9 +75,7 @@ MongoClient.connect(mongoURL, function(err, db) {
 
   database = db;
   let port = 8000;
-  // if (process.env.NODE_ENV === 'production') {
-  //   port = 80;
-  // }
+  
   app.listen(port, function () {
     console.log('lift-or-nah listening on port ' + port + '!')
   })
