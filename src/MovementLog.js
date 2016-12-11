@@ -33,7 +33,6 @@ class MovementLog extends Component {
   handleSetAdded = () => {
     if (this.props.sets != null && this.props.sets.length > 0) {
       let weight = this.props.sets[this.props.sets.length - 1].weight;
-      let reps = this.props.sets[this.props.sets.length - 1].reps;
       this.props.onSetAdded(this.props.movement._id, this.props.date, 0, weight, 0);      
     } else {
       this.props.onSetAdded(this.props.movement._id, this.props.date, 0, 135, 0);    

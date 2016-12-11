@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
 import DatePicker from 'material-ui/DatePicker';
-import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
 
 import { teal500, teal700 } from 'material-ui/styles/colors';
