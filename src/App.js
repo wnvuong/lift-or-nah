@@ -3,6 +3,7 @@ import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
 import DatePicker from 'material-ui/DatePicker';
 import CircularProgress from 'material-ui/CircularProgress';
+import LinearProgress from 'material-ui/LinearProgress';
 
 import { teal500, teal700 } from 'material-ui/styles/colors';
 import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
@@ -191,11 +192,7 @@ class App extends Component {
             />
             <AppContent>
               {this.state.loading && 
-                <CircularProgress 
-                  className='daily-log__loading-indicator'
-                  style={{display: 'block'}}
-                  size={60} thickness={7} 
-                />
+                <LinearProgress mode="indeterminate" />                
               }
               <DailyLog 
                 className='content-container' 
