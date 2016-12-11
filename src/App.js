@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import DailyLog from './DailyLog.js';
 import AddMovementModal from './AddMovementModal.js';
-import DatePicker from 'material-ui/DatePicker';
 import LinearProgress from 'material-ui/LinearProgress';
 
 import { teal500, teal700 } from 'material-ui/styles/colors';
-import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 import AppContent from './AppContent.js';
+import AppHeader from './AppHeader.js';
 import apihelper from './utils/apihelper.js';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import update from 'immutability-helper';
@@ -164,30 +162,9 @@ class App extends Component {
     return (
         <MuiThemeProvider muiTheme={muiTheme}>
           <div>
-            <AppBar 
-              className='app-bar'
-              style={{position: 'fixed'}}
-              title={
-                <div className='content-container'>
-                  <h1 className='app-header' 
-                    style={{ cursor: 'pointer' }}
-                    onTouchTap={(e) => { this.dateInput.focus(); }}
-                  >
-                    <strong>{this.state.date.toLocaleDateString()}</strong>
-                    <NavigationArrowDropDown color='white' />
-                    <DatePicker 
-                      autoOk={true}
-                      id='movement-date'
-                      style={{visibility: 'hidden'}} 
-                      ref={(dateInput) => { this.dateInput = dateInput; }} 
-                      onChange={this.handleDateChanged}
-                      firstDayOfWeek={0}
-                    />
-                  </h1>
-                </div>
-              }
-              zDepth={2}
-              iconElementLeft={<div />}
+            <AppHeader 
+              date={this.state.date}
+              handleDateChanged={this.handleDateChanged} 
             />
             <AppContent>
               {this.state.loading && 
