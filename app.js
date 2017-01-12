@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'production') {
 
 let database = null;
 
-router.use('/build', express.static(path.join(__dirname, '/build')));
+router.use(express.static(path.join(__dirname, '/build')));
 router.use(bodyParser.json());
 
 router.get('/movements', function (req, res) {
