@@ -3,6 +3,7 @@ const MongoHelper = require('./src/utils/mongohelper.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const assert = require('assert');
+const path = require('path');
 const app = express();
 const router = express.Router();
 
